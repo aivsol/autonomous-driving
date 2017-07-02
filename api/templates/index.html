@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+          rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h3 class="text-muted">Detect Signs</h3>
+      </div>
+      <hr/>
+      <form action="detect_signs" method="post" enctype="multipart/form-data">
+        <input type="file" name="file"><br /><br />
+        <input type="submit" value="Detect Signs">
+      </form>
+    </div>
+    <div class="container">
+      <div class="header">
+        <h3 class="text-muted">Detect Vehicles</h3>
+      </div>
+      <hr/>
+      <form action="detect_vehicles" method="post" enctype="multipart/form-data">
+        <input type="file" name="file"><br /><br />
+        <input type="submit" value="Detect Vehicles">
+      </form>
+    </div>
+  </body>
+</html>
