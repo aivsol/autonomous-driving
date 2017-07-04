@@ -10,8 +10,16 @@
         <h3 class="text-muted">Detect Signs</h3>
       </div>
       <hr/>
-      <form action="detect_signs" method="post" enctype="multipart/form-data">
+      <form action="faster_rcnn/detect/signs" method="post" enctype="multipart/form-data">
         <input type="file" name="file"><br /><br />
+        <b> Confidence Threshold: </b>
+        <select name="conf_threshold">
+            <option value="0.6">0.6</option>
+            <option value="0.7">0.7</option>
+            <option value="0.8">0.8</option>
+            <option value="0.9">0.9</option>
+        </select>
+        </br>
         <input type="submit" value="Detect Signs">
       </form>
     </div>
@@ -20,8 +28,16 @@
         <h3 class="text-muted">Detect Vehicles</h3>
       </div>
       <hr/>
-      <form action="detect_vehicles" method="post" enctype="multipart/form-data">
+      <form action="faster_rcnn/detect/vehicles" method="post" enctype="multipart/form-data">
         <input type="file" name="file"><br /><br />
+        <b> Confidence Threshold: </b>
+        <select name="conf_threshold">
+            <option value="0.6">0.6</option>
+            <option value="0.7">0.7</option>
+            <option value="0.8">0.8</option>
+            <option value="0.9">0.9</option>
+        </select>
+        </br>
         <input type="submit" value="Detect Vehicles">
       </form>
     </div>

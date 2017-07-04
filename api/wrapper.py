@@ -14,6 +14,7 @@ import glob as glob
 import os
 import sys
 import classes
+from PIL import Image
 
 VOC_NETS = {'vgg16': ('VGG16',
                   'VGG16_faster_rcnn_final.caffemodel'),
@@ -53,9 +54,11 @@ def draw_detections(im_file, class_name, dets, ax, thresh=0.5):
     plt.tight_layout()
     plt.draw()
 
-def process_frame(net, image_name, CLASSES):
+def process_frame(net, image_name, CLASSES, CONF_THRESH):
     
-    im = cv2.imread(image_name)
+    #im = cv2.imread(image_name)
+    im = np.array(Image.open(image_name))
+    im = im[:,:,::-1]
     timer = Timer()
     timer.tic()
     scores, boxes = im_detect(net, im)
@@ -63,7 +66,6 @@ def process_frame(net, image_name, CLASSES):
     print ('Detection took {:.3f}s for '
            '{:d} object proposals').format(timer.total_time, boxes.shape[0])
 
-    CONF_THRESH = 0.8
     NMS_THRESH = 0.3
     im_path = os.path.join('uploads', 'annotated-frames')
     im = im[:, :, (2, 1, 0)]
@@ -97,7 +99,7 @@ def frames_to_video():
                 'uploads/annotated-frames/%5d.jpg -vcodec mpeg4 ' + \
                 '-pix_fmt yuvj422p uploads/result/test.avi')
     
-def detect_signs(path, cpu_mode=True):
+def detect_signs(path, CONF_THRESH=0.8, cpu_mode=True):
     cfg.TEST.HAS_RPN = True
     
     prototxt = os.path.join(cfg.ROOT_DIR, 'models', 'gtsdb', SIGNS_NETS['zf'][0],
@@ -126,7 +128,7 @@ def detect_signs(path, cpu_mode=True):
     for im_name in im_names:
         print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
         print 'Demo {}'.format(im_name)
-        process_frame(net, im_name, classes.SIGNS_CLASSES)
+        process_frame(net, im_name, classes.SIGNS_CLASSES, CONF_THRESH)
     
     remove_previous_results()
     frames_to_video()
@@ -159,7 +161,7 @@ def detect_vehicles(path, cpu_mode=True):
     for im_name in im_names:
         print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
         print 'Demo {}'.format(im_name)
-        process_frame(net, im_name, classes.VOC_CLASSES)
+        process_frame(net, im_name, classes.VOC_CLASSES, CONF_THRESH)
     
     remove_previous_results()
     frames_to_video()
