@@ -11,13 +11,6 @@ from config import cfg
 # Initialize the Flask application
 app = Flask(__name__)
 
-# This is the path to the upload directory
-app.config['UPLOAD_FOLDER'] = 'uploads/'
-# This is the path to the results directory
-app.config['RESULT_FOLDER'] = 'uploads/result/'
-# These are the extension that we are accepting to be uploaded
-app.config['ALLOWED_EXTENSIONS'] = set(['avi'])
-
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
     return '.' in filename and \

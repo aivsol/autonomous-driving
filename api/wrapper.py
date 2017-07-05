@@ -114,9 +114,10 @@ def detect_signs(path, CONF_THRESH=0.8, cpu_mode=True):
     if cpu_mode:
         caffe.set_mode_cpu()
     else:
+        # TODO: Allow GPU ID to be set through API
         caffe.set_mode_gpu()
-        caffe.set_device(args.gpu_id)
-        cfg.GPU_ID = args.gpu_id
+        caffe.set_device(0)
+        cfg.GPU_ID = 0
     net = caffe.Net(prototxt, caffemodel, caffe.TEST)
 
     print '\n\nLoaded network {:s}'.format(caffemodel)
@@ -147,9 +148,10 @@ def detect_vehicles(path, cpu_mode=True):
     if cpu_mode:
         caffe.set_mode_cpu()
     else:
+        # TODO: Allow GPU ID to be set through API
         caffe.set_mode_gpu()
-        caffe.set_device(args.gpu_id)
-        cfg.GPU_ID = args.gpu_id
+        caffe.set_device(0)
+        cfg.GPU_ID = 0
     net = caffe.Net(prototxt, caffemodel, caffe.TEST)
 
     print '\n\nLoaded network {:s}'.format(caffemodel)
