@@ -11,6 +11,7 @@ import numpy as np
 import caffe, os
 import glob as glob
 import classes as CLS
+from config import cfg as CFG
 from PIL import Image
 
 class FasterRCNN:
@@ -37,7 +38,7 @@ class FasterRCNN:
         remove_previous_frames()
 	video_to_frames()
 	
-	im_names = glob.glob(os.path.join('api/uploads','frames','*.ppm'))
+	im_names = glob.glob(os.path.join(CFG.frames_folder,'*.ppm'))
         im_names.sort()
 	for im_name in im_names:
 	    print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
@@ -87,7 +88,7 @@ class FasterRCNN:
 	       '{:d} object proposals').format(timer.total_time, boxes.shape[0])
 
 	NMS_THRESH = 0.3
-	im_path = os.path.join('api/uploads', 'annotated-frames')
+	im_path = CFG.annotated_frames_folder
 	im = im[:, :, (2, 1, 0)]
 	fig, ax = plt.subplots(figsize=(12, 12)) 
 	ax.imshow(im, aspect='equal')
@@ -100,7 +101,7 @@ class FasterRCNN:
 	    keep = nms(dets, NMS_THRESH)
 	    dets = dets[keep, :]
 	    im_name = image_name.split('/')[-1].replace('.ppm','.jpg')
-	    im_path_ = os.path.join('api/uploads', 'annotated-frames', im_name)
+	    im_path_ = os.path.join(CFG.annotated_frames_folder, im_name)
 	    self.draw_detections(im_path_, cls, dets, ax, thresh=CONF_THRESH)
 	plt.savefig(im_path_, bbox_inches='tight')
         plt.close()
