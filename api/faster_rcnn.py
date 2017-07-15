@@ -5,7 +5,8 @@ from fast_rcnn.test import im_detect
 from fast_rcnn.nms_wrapper import nms
 from utils.timer import Timer
 from utilities import remove_previous_frames, video_to_frames, \
-                        remove_previous_results, frames_to_video
+                        remove_previous_results, frames_to_video, \
+                        prepare_directories
 import matplotlib.pyplot as plt
 import numpy as np
 import caffe, os
@@ -16,7 +17,7 @@ from PIL import Image
 
 class FasterRCNN:
 
-    def __init__ (self, input_path, prototxt_path, caffemodel_path, classes, cpu_mode):
+    def __init__ (self, prototxt_path, caffemodel_path, classes, cpu_mode):
 
         cfg.TEST.HAS_RPN = True
         self.prototxt = prototxt_path
@@ -33,20 +34,20 @@ class FasterRCNN:
 	self.net = caffe.Net(self.prototxt, self.caffemodel, caffe.TEST)
 	print '\n\nLoaded network {:s}'.format(self.caffemodel)
     
-    def detect (self, conf_thresh=0.8):
+    def detect (self, path, conf_thresh=0.8):
         
-        remove_previous_frames()
-	video_to_frames()
+        video_name = path.split("/")[-1]
+        prepare_directories(video_name)
+        frames_folder = video_to_frames(video_name)
 	
-	im_names = glob.glob(os.path.join(CFG.frames_folder,'*.ppm'))
+        im_names = glob.glob(os.path.join(frames_folder,'*.ppm'))
         im_names.sort()
 	for im_name in im_names:
 	    print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 	    print 'Demo {}'.format(im_name)
-	    self. process_frame(im_name, self.classes, conf_thresh)
+	    self. process_frame(video_name, im_name, self.classes, conf_thresh)
 	
-	remove_previous_results()
-	frames_to_video()
+	frames_to_video(video_name)
 
     def draw_detections(self, im_file, class_name, dets, ax, thresh=0.5): 
 
@@ -76,9 +77,12 @@ class FasterRCNN:
 	plt.tight_layout()
 	plt.draw()
 
-    def process_frame(self, image_name, CLASSES, CONF_THRESH):
-	
-	im = np.array(Image.open(image_name))
+    def process_frame(self, video_name, image_name, CLASSES, CONF_THRESH):
+        # Output frame path
+        im_name = image_name.split('/')[-1].replace('.ppm','.jpg')
+        im_path_ = os.path.join(CFG.upload_folder, video_name.split(".")[0],
+                                "annotated-frames", im_name)
+        im = np.array(Image.open(image_name))
 	im = im[:,:,::-1]
 	timer = Timer()
 	timer.tic()
@@ -88,7 +92,6 @@ class FasterRCNN:
 	       '{:d} object proposals').format(timer.total_time, boxes.shape[0])
 
 	NMS_THRESH = 0.3
-	im_path = CFG.annotated_frames_folder
 	im = im[:, :, (2, 1, 0)]
 	fig, ax = plt.subplots(figsize=(12, 12)) 
 	ax.imshow(im, aspect='equal')
@@ -100,8 +103,6 @@ class FasterRCNN:
 			      cls_scores[:, np.newaxis])).astype(np.float32)
 	    keep = nms(dets, NMS_THRESH)
 	    dets = dets[keep, :]
-	    im_name = image_name.split('/')[-1].replace('.ppm','.jpg')
-	    im_path_ = os.path.join(CFG.annotated_frames_folder, im_name)
 	    self.draw_detections(im_path_, cls, dets, ax, thresh=CONF_THRESH)
-	plt.savefig(im_path_, bbox_inches='tight')
+        plt.savefig(im_path_, bbox_inches='tight')
         plt.close()

@@ -1,25 +1,30 @@
 import os
 from config import cfg
 
-# TODO: Make the next four functions flexible
-def remove_previous_frames():
-    cmd = 'rm ' + cfg.frames_folder + '/*'
-    os.system(cmd)
-    cmd = 'rm ' + cfg.annotated_frames_folder + '/*'
-    os.system(cmd)
-    
-def video_to_frames():
-    cmd = 'ffmpeg -y -i ' + cfg.input_path + ' ' + cfg.frames_folder + \
+def prepare_directories(videoname):
+    dir_path = os.path.join(cfg.upload_folder, videoname.split(".")[0])
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+        os.makedirs(os.path.join(dir_path, 'frames'))
+        os.makedirs(os.path.join(dir_path, 'annotated-frames'))
+        os.makedirs(os.path.join(dir_path, 'result'))
+
+def video_to_frames(videoname):
+
+    video_path = os.path.join(cfg.upload_folder, videoname)
+    dir_path = os.path.join(cfg.upload_folder, videoname.split(".")[0])
+    out_path = os.path.join(dir_path, 'frames')
+    cmd = 'ffmpeg -y -i ' + video_path + ' ' + out_path + \
             '/%5d.ppm'
     os.system(cmd)
+    return out_path
 
-def remove_previous_results():
-    cmd = 'rm ' + cfg.result_folder + '/*'
-    os.system(cmd)
+def frames_to_video(videoname):
 
-def frames_to_video():
-
+    dir_path = os.path.join(cfg.upload_folder, videoname.split(".")[0])
+    annotated_frames_folder = os.path.join(dir_path, 'annotated-frames')
+    out_path = os.path.join(dir_path, 'result', videoname)
     cmd = 'ffmpeg -y -start_number 1 -framerate 2 -i ' + \
-        cfg.annotated_frames_folder + '/%5d.jpg -vcodec mpeg4 ' + \
-        '-pix_fmt yuvj422p ' + cfg.result_folder + '/test.avi'
+        annotated_frames_folder + '/%5d.jpg -vcodec mpeg4 ' + \
+        '-pix_fmt yuvj422p ' + out_path
     os.system(cmd)
