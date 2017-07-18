@@ -22,7 +22,7 @@ __C.frames_folder = 'api/uploads/frames'
 
 __C.annotated_frames_folder = 'api/uploads/annotated-frames'
 
-__C.allowed_extensions = set(['avi'])
+__C.allowed_extensions = set(['avi', 'mp4'])
 
 __C.sign_prototxt = os.path.join(__C.root_directory, "core/"\
                     "py-faster-rcnn/models/gtsdb/ZF/faster_rcnn_end2end/"\
@@ -39,3 +39,7 @@ __C.vehicle_prototxt = os.path.join(__C.root_directory, "core/"\
 __C.vehicle_caffemodel = os.path.join(__C.root_directory, "core/"\
                     "py-faster-rcnn/data/faster_rcnn_models/"\
                     "ZF_faster_rcnn_final.caffemodel")
+#Depth configurations
+__C.depth_model_path = os.path.join(__C.root_directory, "core/"\
+                    "tensorflow/models/NYU_ResNet-UpProj.npy")
+

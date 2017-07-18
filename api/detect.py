@@ -5,11 +5,13 @@ from flask import render_template, request, redirect, \
 from werkzeug import secure_filename
 import time
 import classes
-from faster_rcnn import FasterRCNN
+# from faster_rcnn import FasterRCNN
 from config import cfg
-
+from DepthMapFunc import DepthEstimation
 detection_api = Blueprint('detection_api', __name__)
 
+
+depth_estimator = DepthEstimation(cfg.depth_model_path)
 sign_detector = FasterRCNN(cfg.input_path, cfg.sign_prototxt,
         cfg.sign_caffemodel, classes.SIGNS_CLASSES, cfg.cpu_mode)
 
@@ -47,6 +49,7 @@ def detect_signs():
         print ('Processing took {:.3f}s'.format(toc-tic))
         return redirect(url_for('detection_api.uploaded_file',
                                 filename=filename))
+    return 0
 
 # Route that will process the detect vehicle request
 @detection_api.route('/faster_rcnn/vehicles', methods=['POST'])
@@ -56,7 +59,7 @@ def detect_vehicles():
     CONF_THRESHOLD = float(request.form['conf_threshold'])
     # Check if the file is one of the allowed types/extensions
     if file and allowed_file(file.filename):
-        
+
         tic = time.clock()
         # Make the filename safe, remove unsupported chars
         filename = secure_filename(file.filename)
@@ -70,6 +73,33 @@ def detect_vehicles():
         print ('Processing took {:.3f}s'.format(toc-tic))
         return redirect(url_for('detection_api.uploaded_file',
                                 filename=filename))
+    return 0
+
+    # Route that will process the detect signs request
+@detection_api.route('/depthmap', methods=['POST'])
+def depth_map():
+    # Get the name of the uploaded file
+    print("check")
+    file = request.files['file']
+    # CONF_THRESHOLD = float(request.form['conf_threshold'])
+    # Check if the file is one of the allowed types/extensions
+    if file and allowed_file(file.filename):
+        tic = time.clock()
+        # Make the filename safe, remove unsupported chars
+        filename = secure_filename(file.filename)
+        path = os.path.join(cfg.upload_folder, filename)
+        # Move the file form the temporal folder to the upload folder we setup
+        file.save(path)
+        depth_estimator.detect(path)
+        # Redirect the user to the resulting video route, which
+        # will basicaly show on the browser the processed video
+        toc = time.clock()
+        print ('Processing took {:.3f}s'.format(toc - tic))
+        return redirect(url_for('detection_api.uploaded_file',
+                                    filename=filename))
+
+
+
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload

@@ -16,3 +16,7 @@ add_path(caffe_path)
 # Add lib to PYTHONPATH
 lib_path = osp.join(this_dir, '..', 'core', 'py-faster-rcnn', 'lib')
 add_path(lib_path)
+
+
+tensorflow_path = osp.join(this_dir, '..', 'core', 'tensorflow')
+add_path(tensorflow_path)
