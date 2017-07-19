@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import _init
 from fast_rcnn.config import cfg
 from fast_rcnn.test import im_detect
 from fast_rcnn.nms_wrapper import nms
@@ -7,6 +6,8 @@ from utils.timer import Timer
 from apputils.utilities import video_to_frames, \
                          frames_to_video, \
                         prepare_directories
+from ml_algorithm import MLAlgorithm
+
 import matplotlib.pyplot as plt
 import numpy as np
 import caffe, os
@@ -15,10 +16,11 @@ import classes as CLS
 from config import api_config
 from PIL import Image
 
-class FasterRCNN:
+
+class FasterRCNN(MLAlgorithm):
 
     def __init__ (self, prototxt_path, caffemodel_path, classes, cpu_mode):
-
+        MLAlgorithm.__init__(self)
         cfg.TEST.HAS_RPN = True
         self.prototxt = prototxt_path
         self.caffemodel = caffemodel_path
@@ -49,7 +51,7 @@ class FasterRCNN:
 	
 	frames_to_video(video_name)
 
-    def draw_detections(self, im_file, class_name, dets, ax, thresh=0.5): 
+    def draw(self, im_file, class_name, dets, ax, thresh=0.5): 
 
 	if class_name in CLS.IGNORE:
 	    return
@@ -103,6 +105,6 @@ class FasterRCNN:
 			      cls_scores[:, np.newaxis])).astype(np.float32)
 	    keep = nms(dets, NMS_THRESH)
 	    dets = dets[keep, :]
-	    self.draw_detections(im_path_, cls, dets, ax, thresh=CONF_THRESH)
+	    self.draw(im_path_, cls, dets, ax, thresh=CONF_THRESH)
         plt.savefig(im_path_, bbox_inches='tight')
         plt.close()

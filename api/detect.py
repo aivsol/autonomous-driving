@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import _init
 import os
 from flask import render_template, request, redirect, \
                     url_for, send_from_directory, Blueprint
