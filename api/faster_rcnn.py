@@ -4,7 +4,7 @@ from fast_rcnn.config import cfg
 from fast_rcnn.test import im_detect
 from fast_rcnn.nms_wrapper import nms
 from utils.timer import Timer
-from utilities import video_to_frames, \
+from apputils.utilities import video_to_frames, \
                          frames_to_video, \
                         prepare_directories
 import matplotlib.pyplot as plt
