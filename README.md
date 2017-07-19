@@ -35,13 +35,13 @@ sudo apt-get install git
 ```
 git clone https://github.com/aivsol/autonomous-driving.git  
 cd autonomous-driving/  
-git submodule update --init /--recursive  
+git submodule update --init --recursive  
 ```
 ##### Build Caffe
 Follow the instructions at:
 https://github.com/rbgirshick/py-faster-rcnn
 
-Make sure you have downloaded the pre-traned models for the demo
+Make sure you have downloaded the pre-trained models for the demo
 1. Download faster_rcnn_models using the step 5 of the README.md of
    https://github.com/rbgirshick/py-faster-rcnn and place it at
    $REPO_ROOT/api/resources/weights/faster_rcnn_models/
