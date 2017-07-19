@@ -4,7 +4,7 @@ import os.path
 
 __C = edict()
 
-cfg = __C
+api_config = __C
 
 __C.cpu_mode = True
 

@@ -6,20 +6,20 @@ from werkzeug import secure_filename
 import time
 import classes
 from faster_rcnn import FasterRCNN
-from config import cfg
+from config import api_config
 
 detection_api = Blueprint('detection_api', __name__)
 
-sign_detector = FasterRCNN(cfg.sign_prototxt,
-        cfg.sign_caffemodel, classes.SIGNS_CLASSES, cfg.cpu_mode)
+sign_detector = FasterRCNN(api_config.sign_prototxt,
+        api_config.sign_caffemodel, classes.SIGNS_CLASSES, api_config.cpu_mode)
 
-vehicle_detector = FasterRCNN(cfg.vehicle_prototxt,
-        cfg.vehicle_caffemodel, classes.VOC_CLASSES, cfg.cpu_mode)
+vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
+        api_config.vehicle_caffemodel, classes.VOC_CLASSES, api_config.cpu_mode)
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in cfg.allowed_extensions
+           filename.rsplit('.', 1)[1] in api_config.allowed_extensions
 
 @detection_api.route('/')
 def index():
@@ -37,7 +37,7 @@ def detect_signs():
         tic = time.clock()
         # Make the filename safe, remove unsupported chars
         filename = secure_filename(file.filename)
-        path = os.path.join(cfg.upload_folder, filename)
+        path = os.path.join(api_config.upload_folder, filename)
         # Move the file form the temporal folder to the upload folder we setup
         file.save(path)
         sign_detector.detect(path, CONF_THRESHOLD)
@@ -60,7 +60,7 @@ def detect_vehicles():
         tic = time.clock()
         # Make the filename safe, remove unsupported chars
         filename = secure_filename(file.filename)
-        path = os.path.join(cfg.upload_folder, filename)
+        path = os.path.join(api_config.upload_folder, filename)
         # Move the file form the temporal folder to the upload folder we setup
         file.save(path)
         vehicle_detector.detect(path, CONF_THRESHOLD)
@@ -76,7 +76,7 @@ def detect_vehicles():
 # directory and show it on the browser
 @detection_api.route('/uploads/<filename>')
 def uploaded_file(filename):
-    result_directory = os.path.join(cfg.upload_folder,
+    result_directory = os.path.join(api_config.upload_folder,
                                     filename.split(".")[0],
                                     "result")
     return send_from_directory(result_directory,

@@ -12,7 +12,7 @@ import numpy as np
 import caffe, os
 import glob as glob
 import classes as CLS
-from config import cfg as CFG
+from config import api_config
 from PIL import Image
 
 class FasterRCNN:
@@ -80,7 +80,7 @@ class FasterRCNN:
     def process_frame(self, video_name, image_name, CLASSES, CONF_THRESH):
         # Output frame path
         im_name = image_name.split('/')[-1].replace('.ppm','.jpg')
-        im_path_ = os.path.join(CFG.upload_folder, video_name.split(".")[0],
+        im_path_ = os.path.join(api_config.upload_folder, video_name.split(".")[0],
                                 "annotated-frames", im_name)
         im = np.array(Image.open(image_name))
 	im = im[:,:,::-1]
