@@ -8,11 +8,11 @@ def add_path(path):
 
 this_dir = osp.dirname(__file__)
 
-# Add cter-rcnn'ffe to PYTHONPATH
-caffe_path = osp.join(this_dir, '..', 'core', 'py-faster-rcnn', 
+# Add caffe py-faster-rcnn to PYTHONPATH
+caffe_path = osp.join(this_dir, '..', 'core', 'sub-modules', 'py-faster-rcnn', 
                                 'caffe-fast-rcnn', 'python')
 add_path(caffe_path)
 
 # Add lib to PYTHONPATH
-lib_path = osp.join(this_dir, '..', 'core', 'py-faster-rcnn', 'lib')
+lib_path = osp.join(this_dir, '..', 'core', 'sub-modules', 'py-faster-rcnn', 'lib')
 add_path(lib_path)
