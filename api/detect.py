@@ -12,15 +12,21 @@ from config import api_config
 detection_api = Blueprint('detection_api', __name__)
 
 sign_detector = FasterRCNN(api_config.sign_prototxt,
-        api_config.sign_caffemodel, classes.SIGNS_CLASSES, api_config.cpu_mode)
+                           api_config.sign_caffemodel.
+                           classes.SIGNS_CLASSES,
+                           api_config.cpu_mode)
 
 vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
-        api_config.vehicle_caffemodel, classes.VOC_CLASSES, api_config.cpu_mode)
+                              api_config.vehicle_caffemodel,
+                              classes.VOC_CLASSES,
+                              api_config.cpu_mode)
+
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in api_config.allowed_extensions
+
 
 @detection_api.route('/')
 def index():
@@ -49,6 +55,7 @@ def detect_signs():
         return redirect(url_for('detection_api.uploaded_file',
                                 filename=filename))
 
+
 # Route that will process the detect vehicle request
 @detection_api.route('/faster_rcnn/vehicles', methods=['POST'])
 def detect_vehicles():
@@ -57,7 +64,6 @@ def detect_vehicles():
     CONF_THRESHOLD = float(request.form['conf_threshold'])
     # Check if the file is one of the allowed types/extensions
     if file and allowed_file(file.filename):
-        
         tic = time.clock()
         # Make the filename safe, remove unsupported chars
         filename = secure_filename(file.filename)
@@ -71,6 +77,7 @@ def detect_vehicles():
         print ('Processing took {:.3f}s'.format(toc-tic))
         return redirect(url_for('detection_api.uploaded_file',
                                 filename=filename))
+
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
