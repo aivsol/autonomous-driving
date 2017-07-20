@@ -12,7 +12,7 @@ from config import api_config
 detection_api = Blueprint('detection_api', __name__)
 
 sign_detector = FasterRCNN(api_config.sign_prototxt,
-                           api_config.sign_caffemodel.
+                           api_config.sign_caffemodel,
                            classes.SIGNS_CLASSES,
                            api_config.cpu_mode)
 

@@ -20,5 +20,5 @@ SIGNS_CLASSES = ('__background__',
                  'keep-right', 'keep-left', 'roundabout',
                  'restrict-ends-overtaking', 'restrict-ends-overtaking-truck')
 
-IGNORE = ('bottle', 'cat', 'chair', 'cow', 'diningtable', 'dog', 'horse'.
+IGNORE = ('bottle', 'cat', 'chair', 'cow', 'diningtable', 'dog', 'horse',
           'person', 'pottedplant', 'sheep', 'sofa', 'tvmonitor')
