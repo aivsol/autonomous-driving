@@ -10,6 +10,7 @@ from ml_algorithm import MLAlgorithm
 from config import api_config
 
 import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 import numpy as np
 import caffe
 import os

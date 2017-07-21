@@ -26,6 +26,10 @@ conda install libgcc
 ```
 pip install protobuf
 ```
+#### Install ffmpeg
+```
+conda install -c menpo ffmpeg
+```
 #### Install git
 ```
 sudo apt-get install git
