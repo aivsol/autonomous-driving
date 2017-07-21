@@ -40,7 +40,7 @@ class FasterRCNN(MLAlgorithm):
 
     def detect(self, path, conf_thresh=0.8):
 
-        video_name = path.split("/")[-1]
+        video_name = os.path.basename(path)
         frames_folder = video_to_frames(video_name)
 
         im_names = glob.glob(os.path.join(frames_folder, '*.ppm'))
