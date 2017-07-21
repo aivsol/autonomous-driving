@@ -1,22 +1,22 @@
 #!/usr/bin/env python
-from fast_rcnn.config import cfg
-from fast_rcnn.test import im_detect
-from fast_rcnn.nms_wrapper import nms
-from utils.timer import Timer
-from apputils.utilities import video_to_frames
-from apputils.utilities import frames_to_video
-from apputils.utilities import prepare_directories
-from ml_algorithm import MLAlgorithm
-from config import api_config
-
-import matplotlib.pyplot as plt
-plt.switch_backend('agg')
 import numpy as np
 import caffe
 import os
 import glob as glob
 import classes as CLS
 from PIL import Image
+import matplotlib.pyplot as plt
+
+from fast_rcnn.config import cfg
+from fast_rcnn.test import im_detect
+from fast_rcnn.nms_wrapper import nms
+from utils.timer import Timer
+from apputils.utilities import video_to_frames
+from apputils.utilities import frames_to_video
+from ml_algorithm import MLAlgorithm
+from config import api_config
+
+plt.switch_backend('agg')
 
 
 class FasterRCNN(MLAlgorithm):
@@ -41,7 +41,6 @@ class FasterRCNN(MLAlgorithm):
     def detect(self, path, conf_thresh=0.8):
 
         video_name = path.split("/")[-1]
-        prepare_directories(video_name)
         frames_folder = video_to_frames(video_name)
 
         im_names = glob.glob(os.path.join(frames_folder, '*.ppm'))
@@ -77,7 +76,6 @@ class FasterRCNN(MLAlgorithm):
 
         plt.axis('off')
         plt.tight_layout()
-        plt.draw()
 
     def process_frame(self, video_name, image_name, CLASSES, CONF_THRESH):
         # Output frame path

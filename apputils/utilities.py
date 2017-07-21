@@ -2,23 +2,21 @@ import os
 from config import api_config
 
 
-def prepare_directories(videoname):
+def video_to_frames(videoname):
     dir_path = os.path.join(api_config.upload_folder, videoname.split(".")[0])
+    out_path = os.path.join(dir_path, 'frames')
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
         os.makedirs(os.path.join(dir_path, 'frames'))
         os.makedirs(os.path.join(dir_path, 'annotated-frames'))
         os.makedirs(os.path.join(dir_path, 'result'))
 
+        video_path = os.path.join(api_config.upload_folder, videoname)
 
-def video_to_frames(videoname):
+        cmd = 'ffmpeg -y -i ' + video_path + ' ' + out_path + \
+              '/%5d.ppm'
+        os.system(cmd)
 
-    video_path = os.path.join(api_config.upload_folder, videoname)
-    dir_path = os.path.join(api_config.upload_folder, videoname.split(".")[0])
-    out_path = os.path.join(dir_path, 'frames')
-    cmd = 'ffmpeg -y -i ' + video_path + ' ' + out_path + \
-          '/%5d.ppm'
-    os.system(cmd)
     return out_path
 
 
