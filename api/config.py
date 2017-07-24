@@ -42,4 +42,6 @@ __C.vehicle_caffemodel = os.path.join(__C.root_directory, "core/"\
 #Depth configurations
 __C.depth_model_path = os.path.join(__C.root_directory, "core/"\
                     "tensorflow/models/NYU_ResNet-UpProj.npy")
+__C.monodepth_model_path = os.path.join(__C.root_directory, "core/"\
+                    "tensorflow/models/monodepth/model_kitti")
 

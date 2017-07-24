@@ -1,1 +1,5 @@
 *.npy
+*.mp4
+*.pyc
+*.avi
+/core/tensorflow/models/

@@ -8,15 +8,18 @@ import classes
 # from faster_rcnn import FasterRCNN
 from config import cfg
 from DepthMapFunc import DepthEstimation
+from DepthMapFunc import MonoDepthEstimation
 detection_api = Blueprint('detection_api', __name__)
 
 
-depth_estimator = DepthEstimation(cfg.depth_model_path)
-sign_detector = FasterRCNN(cfg.input_path, cfg.sign_prototxt,
-        cfg.sign_caffemodel, classes.SIGNS_CLASSES, cfg.cpu_mode)
 
-vehicle_detector = FasterRCNN(cfg.input_path, cfg.vehicle_prototxt,
-        cfg.vehicle_caffemodel, classes.VOC_CLASSES, cfg.cpu_mode)
+monodepth_estimator = MonoDepthEstimation(cfg.monodepth_model_path)
+depth_estimator = DepthEstimation(cfg.depth_model_path)
+# sign_detector = FasterRCNN(cfg.input_path, cfg.sign_prototxt,
+#         cfg.sign_caffemodel, classes.SIGNS_CLASSES, cfg.cpu_mode)
+#
+# vehicle_detector = FasterRCNN(cfg.input_path, cfg.vehicle_prototxt,
+#         cfg.vehicle_caffemodel, classes.VOC_CLASSES, cfg.cpu_mode)
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
@@ -75,8 +78,8 @@ def detect_vehicles():
                                 filename=filename))
     return 0
 
-    # Route that will process the detect signs request
-@detection_api.route('/depthmap', methods=['POST'])
+# Route that will process the depth map request
+@detection_api.route('/depthmap', methods=['POST']) #resnet/depth
 def depth_map():
     # Get the name of the uploaded file
     print("check")
@@ -97,6 +100,28 @@ def depth_map():
         print ('Processing took {:.3f}s'.format(toc - tic))
         return redirect(url_for('detection_api.uploaded_file',
                                     filename=filename))
+
+# Route that will process monodepth map request
+@detection_api.route('/monodepthmap', methods=['POST'])
+def monodepth_map():
+    # Get the name of the uploaded file
+    file = request.files['file']
+    # CONF_THRESHOLD = float(request.form['conf_threshold'])
+    # Check if the file is one of the allowed types/extensions
+    if file and allowed_file(file.filename):
+        tic = time.clock()
+        # Make the filename safe, remove unsupported chars
+        filename = secure_filename(file.filename)
+        path = os.path.join(cfg.upload_folder, filename)
+        # Move the file form the temporal folder to the upload folder we setup
+        file.save(path)
+        monodepth_estimator.detect(path)
+        # Redirect the user to the resulting video route, which
+        # will basicaly show on the browser the processed video
+        toc = time.clock()
+        print ('Processing took {:.3f}s'.format(toc - tic))
+        return redirect(url_for('detection_api.uploaded_file',
+                                filename=filename))
 
 
 
