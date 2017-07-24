@@ -24,19 +24,6 @@ monodepth_parameters = namedtuple('parameters',
                         'encoder, '
                         'height, width, '
                         'use_deconv, ')
-# monodepth_parameters = namedtuple('parameters',
-#                         'encoder, '
-#                         'height, width, '
-#                         'batch_size, '
-#                         'num_threads, '
-#                         'num_epochs, '
-#                         'do_stereo, '
-#                         'wrap_mode, '
-#                         'use_deconv, '
-#                         'alpha_image_loss, '
-#                         'disp_gradient_loss_weight, '
-#                         'lr_loss_weight, '
-#                         'full_summary')
 
 class MonodepthModel(object):
     """monodepth model"""
