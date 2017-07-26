@@ -27,59 +27,69 @@ class FCRNDepth(MLAlgorithm):
         self.depth_input_channels = 3
         self.depth_input_batch_size = 1
 
-        #Create input node placeholder
-        self.input_node = tf.placeholder(tf.float32, shape=(None, self.depth_input_height, self.depth_input_width, self.depth_input_channels))
 
-        # Construct the network
-        self.net = FCRNdepth.ResNet50UpProj({'data': self.input_node}, self.depth_input_batch_size)
-        self.sess = tf.Session()
-        # Load the converted parameters
-        print('Loading the model')
-        self.net.load(self.weights_path, self.sess)
+        #define tensorflow graph to be used
+        g_FCRNDepth = tf.Graph()
 
-        uninitialized_vars = []
-        for var in tf.global_variables():
-            try:
-                self.sess.run(var)
-            except tf.errors.FailedPreconditionError:
-                uninitialized_vars.append(var)
+        self.graph=g_FCRNDepth
 
-        init_new_vars_op = tf.variables_initializer(uninitialized_vars)
-        self.sess.run(init_new_vars_op)
-        print('Depth Estimation Model loaded successfully')
+        with self.graph.as_default():
+            #Create input node placeholder
+            self.input_node = tf.placeholder(tf.float32, shape=(None, self.depth_input_height, self.depth_input_width, self.depth_input_channels))
+
+            self.sess = tf.Session(graph=self.graph)
+            # Construct the network
+            self.net = FCRNdepth.ResNet50UpProj({'data': self.input_node}, self.depth_input_batch_size)
+            # Load the converted parameters
+            print('Loading the FCRN depth model')
+            self.net.load(self.weights_path, self.sess)
+
+            uninitialized_vars = []
+            for var in tf.global_variables():
+                try:
+                    self.sess.run(var)
+                except tf.errors.FailedPreconditionError:
+                    uninitialized_vars.append(var)
+
+            init_new_vars_op = tf.variables_initializer(uninitialized_vars)
+            self.sess.run(init_new_vars_op)
+
+        print('FCRN Depth Estimation Model loaded successfully')
 
 
     def predict(self, image):
         w, h, c = image.shape
-        image_holder = tf.placeholder(tf.float32, shape=(w, h, c))
-        pred_res = tf.cast(tf.image.resize_images(image, [self.depth_input_height, self.depth_input_width]), tf.uint8)
-        image1 = self.sess.run(pred_res, feed_dict={image_holder: image})
 
-        img = image1
-        img = np.array(img).astype('float32')
-        img = np.expand_dims(np.asarray(img), axis=0)
+        with self.graph.as_default():
+            #     with tf.Session() as self.sess:
+            image_holder = tf.placeholder(tf.float32, shape=(w, h, c))
+            pred_res = tf.cast(tf.image.resize_images(image, [self.depth_input_height, self.depth_input_width]), tf.uint8)
+            image1 = self.sess.run(pred_res, feed_dict={image_holder: image})
 
-        resize_ph = tf.placeholder(tf.float32, shape=(None, 128, 160, 1))
-        pred = self.sess.run(self.net.get_output(), feed_dict={self.input_node: img})
-        pred_res = tf.image.resize_images(resize_ph, [w, h])
-        pred1 = self.sess.run(pred_res, feed_dict={resize_ph: pred})
+            img = np.expand_dims(np.asarray(image1), axis=0)
 
-        smallest = np.min(pred1[0, :, :, 0])
-        largest = np.max(pred1[0, :, :, 0])
-        pred_norm = 255 * (pred1[0, :, :, 0] - smallest) / (largest - smallest)
-        pred_norm = np.dstack((pred_norm, pred_norm, pred_norm))
+            resize_ph = tf.placeholder(tf.float32, shape=(None, 128, 160, 1))
+            pred = self.sess.run(self.net.get_output(), feed_dict={self.input_node: img})
+            pred_res = tf.image.resize_images(resize_ph, [w, h])
+            pred1 = self.sess.run(pred_res, feed_dict={resize_ph: pred})
 
-        place1 = tf.placeholder(tf.float32, shape=(w, h, c))
-        pre = tf.cast(place1, tf.uint8)
-        ss = tf.concat([image, pre], 1)
+            smallest = np.min(pred1[0, :, :, 0])
+            largest = np.max(pred1[0, :, :, 0])
+            pred_norm = 255 * (pred1[0, :, :, 0] - smallest) / (largest - smallest)
+            pred_norm = np.dstack((pred_norm, pred_norm, pred_norm))
 
-        dd = self.sess.run(ss, feed_dict={place1: pred_norm})
+            place1 = tf.placeholder(tf.float32, shape=(w, h, c))
+            pre = tf.cast(place1, tf.uint8)
+            ss = tf.concat([image, pre], 1)
+
+            dd = self.sess.run(ss, feed_dict={place1: pred_norm})
 
         return dd
 
 
     def process_start(self, image):
-        pred = self.predict(image)
+        img = np.array(image).astype('float32')
+        pred = self.predict(img)
         return pred
 
 
@@ -110,7 +120,7 @@ class FCRNDepth(MLAlgorithm):
             im = np.array(Image.open(img_name))
             im = im[:, :, ::-1]
             disparity = self.process_start(im)
-            fig, ax = plt.subplots(figsize=(12, 12))
+            fig, ax = plt.subplots(figsize=(18, 18))
             ax.imshow(im, aspect='equal')
             plt.imshow(disparity)
             plt.axis('off')

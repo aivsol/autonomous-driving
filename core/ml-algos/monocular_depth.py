@@ -37,26 +37,28 @@ class MonocularDepth(MLAlgorithm):
             width=input_width,
             use_deconv=use_deconv
         )
+        g_monocular = tf.Graph()
+        self.graph = g_monocular
+        with self.graph.as_default():
+            self.left = tf.placeholder(tf.float32, [2, 256, 512, 3])
+            self.right = tf.placeholder(tf.float32, [2, 256, 512, 3])
 
-        self.left = tf.placeholder(tf.float32, [2, 256, 512, 3])
-        self.right = tf.placeholder(tf.float32, [2, 256, 512, 3])
+            self.model = monoculardepth.MonodepthModel(params, 'test', self.left, self.right)
 
-        self.model = monoculardepth.MonodepthModel(params, 'test', self.left, self.right)
+            # SESSION
+            config = tf.ConfigProto(allow_soft_placement=True)
+            self.sess1 = tf.Session(config=config, graph=self.graph)
 
-        # SESSION
-        config = tf.ConfigProto(allow_soft_placement=True)
-        self.sess1 = tf.Session(config=config)
+            # SAVER
+            train_saver = tf.train.Saver()
 
-        # SAVER
-        train_saver = tf.train.Saver()
+            # INIT
+            self.sess1.run(tf.global_variables_initializer())
+            self.sess1.run(tf.local_variables_initializer())
 
-        # INIT
-        self.sess1.run(tf.global_variables_initializer())
-        self.sess1.run(tf.local_variables_initializer())
-
-        # print restore_path
-        train_saver.restore(self.sess1, weight_path)
-        print('Monodepth Estimation Model Loaded Successfully')
+            # print restore_path
+            train_saver.restore(self.sess1, weight_path)
+            print('Monodepth Estimation Model Loaded Successfully')
 
     def post_process_disparity(self, disp):
         _, h, w = disp.shape
@@ -69,24 +71,25 @@ class MonocularDepth(MLAlgorithm):
         return r_mask * l_disp + l_mask * r_disp + (1.0 - l_mask - r_mask) * m_disp
 
     def process_start(self, image):
-        im = tf.placeholder("float32", [720, 1280, 3])
-        left_res = tf.image.resize_images(im, [256, 512])
-        # left1=tf.expand_dims(left1, 0)
-        left_in = tf.stack([left_res, tf.image.flip_left_right(left_res)])
-        left_frame = self.sess1.run(left_in, feed_dict={im: image}) / 255
-        disp = self.sess1.run(self.model.disp_left_est[0], feed_dict={self.left: left_frame})
-        # disparities = disp[0].squeeze()
-        disparities_pp = self.post_process_disparity(disp.squeeze())
-        mind = np.min(disparities_pp)
-        maxd = np.max(disparities_pp)
-        d = 255 * (disparities_pp - mind) / (maxd - mind)
-        d = np.dstack([d, d, d])
+        with self.graph.as_default():
+            im = tf.placeholder("float32", [720, 1280, 3])
+            left_res = tf.image.resize_images(im, [256, 512])
+            # left1=tf.expand_dims(left1, 0)
+            left_in = tf.stack([left_res, tf.image.flip_left_right(left_res)])
+            left_frame = self.sess1.run(left_in, feed_dict={im: image}) / 255
+            disp = self.sess1.run(self.model.disp_left_est[0], feed_dict={self.left: left_frame})
+            # disparities = disp[0].squeeze()
+            disparities_pp = self.post_process_disparity(disp.squeeze())
+            mind = np.min(disparities_pp)
+            maxd = np.max(disparities_pp)
+            d = 255 * (disparities_pp - mind) / (maxd - mind)
+            d = np.dstack([d, d, d])
 
-        resize_ph = tf.placeholder(tf.float32, shape=(256, 512, 3))
-        place1 = tf.image.resize_images(resize_ph, [720, 1280])
-        pre = tf.cast(place1, tf.uint8)
-        ss = tf.concat([image, pre], 1)
-        disparity = self.sess1.run(ss, feed_dict={resize_ph: d})
+            resize_ph = tf.placeholder(tf.float32, shape=(256, 512, 3))
+            place1 = tf.image.resize_images(resize_ph, [720, 1280])
+            pre = tf.cast(place1, tf.uint8)
+            ss = tf.concat([image, pre], 1)
+            disparity = self.sess1.run(ss, feed_dict={resize_ph: d})
 
         return disparity
 

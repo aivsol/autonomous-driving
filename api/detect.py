@@ -13,8 +13,15 @@ from monocular_depth import MonocularDepth
 detection_api = Blueprint('detection_api', __name__)
 
 
-
+FCRNDepth_estimator = FCRNDepth(api_config.FCRN_depth_model_path, api_config.FCRN_depth_weights_path)
 monoculardepth_estimator = MonocularDepth(api_config.monocular_depth_model_path, api_config.monocular_depth_weights_path)
+
+# sign_detector = FasterRCNN(api_config.input_path, api_config.sign_prototxt,
+#         api_config.sign_caffemodel, classes.SIGNS_CLASSES, api_config.cpu_mode)
+#
+# vehicle_detector = FasterRCNN(api_config.input_path, api_config.vehicle_prototxt,
+#         api_config.vehicle_caffemodel, classes.VOC_CLASSES, api_config.cpu_mode)
+
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
@@ -78,7 +85,6 @@ def detect_vehicles():
 @detection_api.route('/fcrn/depth', methods=['POST'])
 def FCRNdepth_map():
     # Get the name of the uploaded file
-    print("check")
     file = request.files['file']
     # CONF_THRESHOLD = float(request.form['conf_threshold'])
     # Check if the file is one of the allowed types/extensions
@@ -118,6 +124,7 @@ def monoculardepth_map():
         print ('Processing took {:.3f}s'.format(toc - tic))
         return redirect(url_for('detection_api.uploaded_file',
                                 filename=filename))
+
 
 
 # This route is expecting a parameter containing the name
