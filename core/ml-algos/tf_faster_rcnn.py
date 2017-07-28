@@ -1,42 +1,43 @@
 #!/usr/bin/env python
+import tensorflow as tf
 import numpy as np
-import caffe
 import os
 import glob as glob
 import classes as CLS
 from PIL import Image
 import matplotlib.pyplot as plt
 
-from fast_rcnn.config import cfg
-from fast_rcnn.test import im_detect
-from fast_rcnn.nms_wrapper import nms
-from utils.timer import Timer
+from lib.networks.factory import get_network
+from lib.fast_rcnn.config import cfg
+from lib.fast_rcnn.test import im_detect
+from lib.fast_rcnn.nms_wrapper import nms
+from lib.utils.timer import Timer
+
 from apputils.utilities import video_to_frames
 from apputils.utilities import frames_to_video
+
 from ml_algorithm import MLAlgorithm
 from config import api_config
 
 plt.switch_backend('agg')
 
 
-class FasterRCNN(MLAlgorithm):
+class TFFasterRCNN(MLAlgorithm):
 
-    def __init__(self, prototxt_path, caffemodel_path, classes, cpu_mode):
+    def __init__(self, model_name, demo_net, demo_model, classes):
         MLAlgorithm.__init__(self)
         cfg.TEST.HAS_RPN = True
-        self.prototxt = prototxt_path
-        self.caffemodel = caffemodel_path
-        self.cpu_mode = cpu_mode
+        g = tf.Graph()
+        with g.as_default():
+            # init session
+            self.sess = tf.Session(
+                        config=tf.ConfigProto(allow_soft_placement=True)
+                        )
+            self.net = get_network(demo_net, len(classes))
+            saver = tf.train.Saver()
+            saver.restore(self.sess, demo_model)
         self.classes = classes
-        if cpu_mode:
-            caffe.set_mode_cpu()
-        else:
-            # TODO: Allow GPU ID to be set through API
-            caffe.set_mode_gpu()
-            caffe.set_device(0)
-            cfg.GPU_ID = 0
-        self.net = caffe.Net(self.prototxt, self.caffemodel, caffe.TEST)
-        print 'Loaded network {:s}'.format(self.caffemodel)
+        print 'Loaded network {:s}'.format(demo_model)
 
     def detect(self, path, conf_thresh=0.8):
 
@@ -47,7 +48,7 @@ class FasterRCNN(MLAlgorithm):
         im_names.sort()
         for im_name in im_names:
             print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-            print 'Demo CAFFE {}'.format(im_name)
+            print 'Demo TF {}'.format(im_name)
             self. process_frame(video_name, im_name, self.classes, conf_thresh)
 
         frames_to_video(video_name)
@@ -87,7 +88,7 @@ class FasterRCNN(MLAlgorithm):
         im = im[:, :, ::-1]
         timer = Timer()
         timer.tic()
-        scores, boxes = im_detect(self.net, im)
+        scores, boxes = im_detect(self.sess, self.net, im)
         timer.toc()
         print ('Detection took {:.3f}s for '
                '{:d} object proposals').format(timer.total_time,
