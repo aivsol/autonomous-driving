@@ -16,8 +16,6 @@ from apputils.utilities import frames_to_video
 from ml_algorithm import MLAlgorithm
 from config import api_config
 
-plt.switch_backend('agg')
-
 
 class FasterRCNN(MLAlgorithm):
 

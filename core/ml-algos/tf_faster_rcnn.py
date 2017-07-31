@@ -19,8 +19,6 @@ from apputils.utilities import frames_to_video
 from ml_algorithm import MLAlgorithm
 from config import api_config
 
-plt.switch_backend('agg')
-
 
 class TFFasterRCNN(MLAlgorithm):
 
@@ -80,7 +78,7 @@ class TFFasterRCNN(MLAlgorithm):
 
     def process_frame(self, video_name, image_name, CLASSES, CONF_THRESH):
         # Output frame path
-        im_name = image_name.split('/')[-1].replace('.ppm', '.jpg')
+        im_name = os.path.basename(image_name).replace('.ppm', '.jpg')
         im_path_ = os.path.join(api_config.upload_folder,
                                 video_name.split(".")[0],
                                 "annotated-frames", im_name)
