@@ -7,19 +7,38 @@ from werkzeug import secure_filename
 import time
 import classes
 from faster_rcnn import FasterRCNN
+from tf_faster_rcnn import TFFasterRCNN
 from config import api_config
 
 detection_api = Blueprint('detection_api', __name__)
 
-sign_detector = FasterRCNN(api_config.sign_prototxt,
-                           api_config.sign_caffemodel,
-                           classes.SIGNS_CLASSES,
-                           api_config.cpu_mode)
+if api_config.sign_framework == "TF":
+    vehicle_detector = TFFasterRCNN('vehicle',
+                                    api_config.vehicle_net,
+                                    api_config.vehicle_tfmodel,
+                                    classes.VOC_CLASSES)
 
-vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
-                              api_config.vehicle_caffemodel,
-                              classes.VOC_CLASSES,
-                              api_config.cpu_mode)
+elif api_config.sign_framework == "CAFFE":
+    vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
+                                  api_config.vehicle_caffemodel,
+                                  classes.VOC_CLASSES,
+                                  api_config.cpu_mode)
+else:
+    raise ValueError("Only TF and CAFFE implementations supported")
+
+if api_config.sign_framework == "TF":
+    sign_detector = TFFasterRCNN('sign',
+                                 api_config.sign_net,
+                                 api_config.sign_tfmodel,
+                                 classes.SIGNS_CLASSES)
+
+elif api_config.sign_framework == "CAFFE":
+    sign_detector = FasterRCNN(api_config.sign_prototxt,
+                               api_config.sign_caffemodel,
+                               classes.SIGNS_CLASSES,
+                               api_config.cpu_mode)
+else:
+    raise ValueError("Only TF and CAFFE implementations supported")
 
 
 # For a given file, return whether it's an allowed type or not

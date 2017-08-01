@@ -21,6 +21,11 @@ lib_path = osp.join(this_dir, '..', 'core', 'sub-modules',
                     'py-faster-rcnn', 'lib')
 add_path(lib_path)
 
+# ADD TFFRCNN to Python Path
+tffrcnn_path = osp.join(this_dir, '..', 'core', 'sub-modules',
+                        'aivsol-TFFRCNN')
+add_path(tffrcnn_path)
+
 # Add ml-algos to PYTHONPATH
 ml_algos_path = osp.join(this_dir, '..', 'core', 'ml-algos')
 add_path(ml_algos_path)

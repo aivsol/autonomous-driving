@@ -1,3 +1,6 @@
 [submodule "core/sub-modules/py-faster-rcnn"]
 	path = core/sub-modules/py-faster-rcnn
 	url = https://github.com/rbgirshick/py-faster-rcnn.git
+[submodule "core/sub-modules/aivsol-TFFRCNN"]
+	path = core/sub-modules/aivsol-TFFRCNN
+	url = https://github.com/aivsol/aivsol-TFFRCNN.git
