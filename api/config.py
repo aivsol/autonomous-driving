@@ -20,10 +20,10 @@ __C.frames_folder = 'api/uploads/frames'
 
 __C.annotated_frames_folder = 'api/uploads/annotated-frames'
 
-__C.allowed_extensions = set(['avi'])
+__C.allowed_extensions = set(['avi', 'mp4'])
 
 # sign_framework could be "TF" OR "CAFFE"
-__C.sign_framework = "TF"
+__C.sign_framework = "CAFFE"
 
 # SIGN CAFFE CONFIG
 __C.sign_prototxt = os.path.join(__C.root_directory, "api/resources/"
@@ -42,12 +42,12 @@ __C.sign_tfmodel = os.path.join(__C.root_directory, "api/resources/"
 __C.sign_net = "VGGnet_test"
 
 # vehicle_framework could be "TF" OR "CAFFE"
-__C.vehicle_framework = "TF"
+__C.vehicle_framework = "CAFFE"
 
 # VECHILE CAFFE CONFIG
 __C.vehicle_prototxt = os.path.join(__C.root_directory, "api/resources/"
                                     "faster-rcnn/models/pascal_voc/"
-                                    "ZF/test.prototxt")
+                                    "ZF/faster_rcnn_test.pt")
 
 __C.vehicle_caffemodel = os.path.join(__C.root_directory, "api/"
                                       "resources/faster-rcnn/weights/"
