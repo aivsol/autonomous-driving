@@ -72,7 +72,8 @@ class MonocularDepth(MLAlgorithm):
 
     def process_start(self, image):
         with self.graph.as_default():
-            im = tf.placeholder("float32", [720, 1280, 3])
+            w,h,c = image.shape
+            im = tf.placeholder("float32", [w,h,c])
             left_res = tf.image.resize_images(im, [256, 512])
             # left1=tf.expand_dims(left1, 0)
             left_in = tf.stack([left_res, tf.image.flip_left_right(left_res)])
@@ -86,7 +87,7 @@ class MonocularDepth(MLAlgorithm):
             d = np.dstack([d, d, d])
 
             resize_ph = tf.placeholder(tf.float32, shape=(256, 512, 3))
-            place1 = tf.image.resize_images(resize_ph, [720, 1280])
+            place1 = tf.image.resize_images(resize_ph, [w,h])
             pre = tf.cast(place1, tf.uint8)
             ss = tf.concat([image, pre], 1)
             disparity = self.sess1.run(ss, feed_dict={resize_ph: d})
