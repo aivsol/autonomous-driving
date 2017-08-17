@@ -11,7 +11,7 @@ import classes
 # from faster_rcnn import FasterRCNN
 # from tf_faster_rcnn import TFFasterRCNN
 from config import api_config
-from FCRN_depth import FCRNDepth
+# from FCRN_depth import FCRNDepth
 from monocular_depth import MonocularDepth
 detection_api = Blueprint('detection_api', __name__)
 
@@ -19,39 +19,39 @@ detection_api = Blueprint('detection_api', __name__)
 FCRNDepth_estimator = FCRNDepth(api_config.FCRN_depth_model_path, api_config.FCRN_depth_weights_path)
 monoculardepth_estimator = MonocularDepth(api_config.monocular_depth_model_path, api_config.monocular_depth_weights_path)
 #
-# sign_detector = FasterRCNN(api_config.sign_prototxt,
-#         api_config.sign_caffemodel, classes.SIGNS_CLASSES, api_config.cpu_mode)
-#
-# vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
-#         api_config.vehicle_caffemodel, classes.VOC_CLASSES, api_config.cpu_mode)
-#
-# if api_config.sign_framework == "TF":
-#     vehicle_detector = TFFasterRCNN('vehicle',
-#                                     api_config.vehicle_net,
-#                                     api_config.vehicle_tfmodel,
-#                                     classes.VOC_CLASSES)
-#
-# elif api_config.sign_framework == "CAFFE":
-#     vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
-#                                   api_config.vehicle_caffemodel,
-#                                   classes.VOC_CLASSES,
-#                                   api_config.cpu_mode)
-# else:
-#     raise ValueError("Only TF and CAFFE implementations supported")
-#
-# if api_config.sign_framework == "TF":
-#     sign_detector = TFFasterRCNN('sign',
-#                                  api_config.sign_net,
-#                                  api_config.sign_tfmodel,
-#                                  classes.SIGNS_CLASSES)
-#
-# elif api_config.sign_framework == "CAFFE":
-#     sign_detector = FasterRCNN(api_config.sign_prototxt,
-#                                api_config.sign_caffemodel,
-#                                classes.SIGNS_CLASSES,
-#                                api_config.cpu_mode)
-# else:
-#     raise ValueError("Only TF and CAFFE implementations supported")
+sign_detector = FasterRCNN(api_config.sign_prototxt,
+        api_config.sign_caffemodel, classes.SIGNS_CLASSES, api_config.cpu_mode)
+
+vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
+        api_config.vehicle_caffemodel, classes.VOC_CLASSES, api_config.cpu_mode)
+
+if api_config.sign_framework == "TF":
+    vehicle_detector = TFFasterRCNN('vehicle',
+                                    api_config.vehicle_net,
+                                    api_config.vehicle_tfmodel,
+                                    classes.VOC_CLASSES)
+
+elif api_config.sign_framework == "CAFFE":
+    vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
+                                  api_config.vehicle_caffemodel,
+                                  classes.VOC_CLASSES,
+                                  api_config.cpu_mode)
+else:
+    raise ValueError("Only TF and CAFFE implementations supported")
+
+if api_config.sign_framework == "TF":
+    sign_detector = TFFasterRCNN('sign',
+                                 api_config.sign_net,
+                                 api_config.sign_tfmodel,
+                                 classes.SIGNS_CLASSES)
+
+elif api_config.sign_framework == "CAFFE":
+    sign_detector = FasterRCNN(api_config.sign_prototxt,
+                               api_config.sign_caffemodel,
+                               classes.SIGNS_CLASSES,
+                               api_config.cpu_mode)
+else:
+    raise ValueError("Only TF and CAFFE implementations supported")
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
@@ -150,7 +150,6 @@ def monoculardepth_map():
         monoculardepth_estimator.detect(path)
         # Redirect the user to the resulting video route, which
         # will basicaly show on the browser the processed video
-        FCRNDepth_estimator.detect(path)
         toc = time.clock()
         print ('Processing took {:.3f}s'.format(toc - tic))
         return redirect(url_for('detection_api.uploaded_file',
