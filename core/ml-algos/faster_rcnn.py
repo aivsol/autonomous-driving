@@ -78,12 +78,7 @@ class FasterRCNN(MLAlgorithm):
                     fontsize=14, color='white')
 
             frame_name = os.path.basename(im_file)
-            if frame_name in self.xml.keys():
-                self.xml[frame_name] += [class_name, bbox[0], bbox[1],
-                                         bbox[2], bbox[3]]
-            else:
-                self.xml[frame_name] = [class_name, bbox[0], bbox[1],
-                                        bbox[2], bbox[3]]
+
             xml_add_object(self.annotation, frame_name.split(".")[0],
                            class_name, self.classes.index(class_name),
                            bbox)
