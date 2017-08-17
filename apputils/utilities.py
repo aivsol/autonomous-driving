@@ -1,4 +1,5 @@
 import os
+import time
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
 
@@ -63,7 +64,8 @@ def xml_add_object(annotation, frame, class_name, class_id, bbox):
     parts = ET.SubElement(obj, "parts")
     ET.SubElement(parts, "hasparts")
     ET.SubElement(parts, "ispartof")
-    ET.SubElement(obj, "date").text = "11-Aug-2017 20:22:58"
+    ET.SubElement(obj, "date").text = time.strftime("%d-%m-%Y") + \
+                                      " " + time.strftime("%H:%M:%S")
     ET.SubElement(obj, "id").text = str(class_id)
     ET.SubElement(obj, "type").text = "bounding_box"
 
