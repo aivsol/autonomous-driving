@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="297f6e12-f542-48dc-ba5d-7fe044362e4f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/sub-modules/aivsol-TFFRCNN" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/api/resources/tffaster-rcnn/weights/GTSDB/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/api/resources/tffaster-rcnn/weights/pascal_voc/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/ml-algos/tf_faster_rcnn.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/matplotlibrc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitmodules" afterPath="$PROJECT_DIR$/.gitmodules" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/_init.py" afterPath="$PROJECT_DIR$/api/_init.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/config.py" afterPath="$PROJECT_DIR$/api/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/detect.py" afterPath="$PROJECT_DIR$/api/detect.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/templates/index.html" afterPath="$PROJECT_DIR$/api/templates/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/ml-algos/faster_rcnn.py" afterPath="$PROJECT_DIR$/core/ml-algos/faster_rcnn.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/ml-algos/monocular_depth.py" afterPath="$PROJECT_DIR$/core/ml-algos/monocular_depth.py" />
-    </list>
+    <list default="true" id="297f6e12-f542-48dc-ba5d-7fe044362e4f" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -95,8 +81,8 @@
       <file leaf-file-name="detect.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/detect.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="10" column="34" lean-forward="true" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
+            <state relative-caret-position="198">
+              <caret line="11" column="39" lean-forward="true" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
               <folding>
                 <marker date="1502822285633" expanded="true" signature="2262:2326" ph="..." />
               </folding>
@@ -763,8 +749,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api/detect.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="34" lean-forward="true" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
+        <state relative-caret-position="198">
+          <caret line="11" column="39" lean-forward="true" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
           <folding>
             <marker date="1502822285633" expanded="true" signature="2262:2326" ph="..." />
           </folding>
