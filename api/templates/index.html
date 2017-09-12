@@ -27,6 +27,10 @@
         padding: 30px;
       }
     }
+    .coming-soon {
+      color: #A5A5A5;
+      font-size: 24px;
+    }
   </style>
 </head>
 
@@ -166,12 +170,17 @@
 
               <div class="field is-horizontal">
                 <div class="field-label is-normal">
-                  <label class="label">Options</label>
+                  <label class="label">Environment</label>
                 </div>
                 <div class="field-body">
                   <div class="field is-narrow">
                     <div class="control">
-                      <p>Coming soon</p>
+                        <div class="select is-fullwidth">
+                            <select name="environment">
+                              <option value="indoor">Indoor</option>
+                              <option value="outdoor">Outdoor</option>
+                            </select>
+                          </div>
                     </div>
                   </div>
                 </div>
@@ -186,9 +195,10 @@
           <!-- detect lanes -->
           <div class="column column_border is-5 is-offset-1">
             <h3 class="title is-3">Road Lane detection</h3>
+            <span class="coming-soon">Coming Soon...</span>
 
-            <!-- TODO: update form action for API call -->
-            <form action="faster_rcnn/vehicles" method="post" enctype="multipart/form-data">
+            <!-- TODO: Update form and API call, update fields once it's done in backend -->
+            <!-- <form action="faster_rcnn/vehicles" method="post" enctype="multipart/form-data">
 
               <div class="field is-horizontal">
                 <div class="field-label">
@@ -227,7 +237,7 @@
                   <input class="button is-info is-medium" type="submit" value="Detect Lanes">
                 </div>
               </div>
-            </form>
+            </form> -->
           </div>
         </div>
       </div>
@@ -244,5 +254,4 @@
     </div>
   </footer>
 </body>
-
 </html>
