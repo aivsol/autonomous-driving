@@ -96,11 +96,15 @@ class MonocularDepth(MLAlgorithm):
 
     def detect(self, path):
         #Using Moviepy script - Start
-        vid_output = api_config.result_folder + 'out.mp4'
+        video_name = os.path.basename(path).split('.')[0]
+        video_output_dir = os.path.join(api_config.upload_folder, video_name, 'result')
+        if not os.path.exists(video_output_dir):
+            os.makedirs(video_output_dir)
+        video_output_file = os.path.join(video_output_dir, video_name + '_depth.mp4')
         # Location of the input video
         clip1 = VideoFileClip(path)
-        vid_clip = clip1.fl_image(self.process_start)
-        vid_clip.write_videofile(vid_output, audio=False)
+        video_clip = clip1.fl_image(self.process_start)
+        video_clip.write_videofile(video_output_file, audio=False)
         # Using Moviepy script - End
 
         #ffmpeg based script - Start
