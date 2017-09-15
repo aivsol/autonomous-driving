@@ -23,7 +23,7 @@ __C.annotated_frames_folder = 'api/uploads/annotated-frames'
 __C.allowed_extensions = set(['avi', 'mp4'])
 
 # sign_framework could be "TF" OR "CAFFE"
-__C.sign_framework = "CAFFE"
+__C.sign_framework = "TF"
 
 # SIGN CAFFE CONFIG
 __C.sign_prototxt = os.path.join(__C.root_directory, "api/resources/"
@@ -37,12 +37,12 @@ __C.sign_caffemodel = os.path.join(__C.root_directory, "api/resources/"
 # SIGN TF CONFIG
 __C.sign_tfmodel = os.path.join(__C.root_directory, "api/resources/"
                                 "tffaster-rcnn/weights/GTSDB/"
-                                "VGGnet_fast_rcnn_iter_15000.ckpt")
+                                "VGGnet_fast_rcnn_iter_90000.ckpt")
 
 __C.sign_net = "VGGnet_test"
 
 # vehicle_framework could be "TF" OR "CAFFE"
-__C.vehicle_framework = "CAFFE"
+__C.vehicle_framework = "TF"
 
 # VECHILE CAFFE CONFIG
 __C.vehicle_prototxt = os.path.join(__C.root_directory, "api/resources/"

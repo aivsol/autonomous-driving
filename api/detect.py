@@ -8,30 +8,23 @@ import time
 import classes
 
 # from faster_rcnn import FasterRCNN
-# from faster_rcnn import FasterRCNN
-# from tf_faster_rcnn import TFFasterRCNN
+from tf_faster_rcnn import TFFasterRCNN
 from config import api_config
 # from FCRN_depth import FCRNDepth
 from monocular_depth import MonocularDepth
 detection_api = Blueprint('detection_api', __name__)
 
 
-FCRNDepth_estimator = FCRNDepth(api_config.FCRN_depth_model_path, api_config.FCRN_depth_weights_path)
+#FCRNDepth_estimator = FCRNDepth(api_config.FCRN_depth_model_path, api_config.FCRN_depth_weights_path)
 monoculardepth_estimator = MonocularDepth(api_config.monocular_depth_model_path, api_config.monocular_depth_weights_path)
-#
-sign_detector = FasterRCNN(api_config.sign_prototxt,
-        api_config.sign_caffemodel, classes.SIGNS_CLASSES, api_config.cpu_mode)
 
-vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
-        api_config.vehicle_caffemodel, classes.VOC_CLASSES, api_config.cpu_mode)
-
-if api_config.sign_framework == "TF":
+if api_config.vehicle_framework == "TF":
     vehicle_detector = TFFasterRCNN('vehicle',
                                     api_config.vehicle_net,
                                     api_config.vehicle_tfmodel,
                                     classes.VOC_CLASSES)
 
-elif api_config.sign_framework == "CAFFE":
+elif api_config.vehicle_framework == "CAFFE":
     vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
                                   api_config.vehicle_caffemodel,
                                   classes.VOC_CLASSES,
