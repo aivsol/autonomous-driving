@@ -6,4 +6,5 @@ from api.config import api_config
 app = Flask(__name__, template_folder=api_config.template_directory)
 app.register_blueprint(detection_api, url_prefix='/detect')
 
-app.run(host='0.0.0.0')
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
