@@ -28,9 +28,10 @@ conda install -c menpo ffmpeg
 conda install nomkl
 ```
 
-#### Install protobuf
+#### Install protobuf and moviepy
 ````
 pip install protobuf
+pip install moviepy
 ````
 
 
