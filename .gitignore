@@ -1,0 +1,10 @@
+*.npy
+*.mp4
+*.pyc
+*.avi
+*.jpg
+*.ppm
+/api/resources/FCRN_depth/weights/
+/api/resources/monocular_depth/weights/
+/api/uploads/result
+/core/sub-modules/aivsol-TFFRCNN/

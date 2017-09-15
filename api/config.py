@@ -23,7 +23,7 @@ __C.annotated_frames_folder = 'api/uploads/annotated-frames'
 __C.allowed_extensions = set(['avi', 'mp4'])
 
 # sign_framework could be "TF" OR "CAFFE"
-__C.sign_framework = "CAFFE"
+__C.sign_framework = "TF"
 
 # SIGN CAFFE CONFIG
 __C.sign_prototxt = os.path.join(__C.root_directory, "api/resources/"
@@ -37,12 +37,12 @@ __C.sign_caffemodel = os.path.join(__C.root_directory, "api/resources/"
 # SIGN TF CONFIG
 __C.sign_tfmodel = os.path.join(__C.root_directory, "api/resources/"
                                 "tffaster-rcnn/weights/GTSDB/"
-                                "VGGnet_fast_rcnn_iter_15000.ckpt")
+                                "VGGnet_fast_rcnn_iter_90000.ckpt")
 
 __C.sign_net = "VGGnet_test"
 
 # vehicle_framework could be "TF" OR "CAFFE"
-__C.vehicle_framework = "CAFFE"
+__C.vehicle_framework = "TF"
 
 # VECHILE CAFFE CONFIG
 __C.vehicle_prototxt = os.path.join(__C.root_directory, "api/resources/"
@@ -54,9 +54,19 @@ __C.vehicle_caffemodel = os.path.join(__C.root_directory, "api/"
                                       "pascal_voc/"
                                       "ZF_faster_rcnn_final.caffemodel")
 
-# VEHICLE TF CONFIG
+#Depth configurations
+__C.FCRN_depth_model_path = os.path.join(__C.root_directory, "core/"\
+                    "sub-modules/FCRN_depth")
+__C.FCRN_depth_weights_path = os.path.join(__C.root_directory, "api/"\
+                    "resources/FCRN_depth/weights/NYU_ResNet-UpProj.npy")
+__C.monocular_depth_model_path = os.path.join(__C.root_directory, "core/"\
+                    "sub-modules/monocular_depth")
+__C.monocular_depth_weights_path = os.path.join(__C.root_directory, "api/"\
+                    "resources/monocular_depth/weights/model_cityscapes")
+
 __C.vehicle_tfmodel = os.path.join(__C.root_directory, "api/resources/"
                                    "tffaster-rcnn/weights/pascal_voc/"
                                    "VGGnet_fast_rcnn_iter_150000.ckpt")
 
 __C.vehicle_net = "VGGnet_test"
+

@@ -6,19 +6,25 @@ from flask import render_template, request, redirect, \
 from werkzeug import secure_filename
 import time
 import classes
-from faster_rcnn import FasterRCNN
+
+# from faster_rcnn import FasterRCNN
 from tf_faster_rcnn import TFFasterRCNN
 from config import api_config
-
+# from FCRN_depth import FCRNDepth
+from monocular_depth import MonocularDepth
 detection_api = Blueprint('detection_api', __name__)
 
-if api_config.sign_framework == "TF":
+
+#FCRNDepth_estimator = FCRNDepth(api_config.FCRN_depth_model_path, api_config.FCRN_depth_weights_path)
+monoculardepth_estimator = MonocularDepth(api_config.monocular_depth_model_path, api_config.monocular_depth_weights_path)
+
+if api_config.vehicle_framework == "TF":
     vehicle_detector = TFFasterRCNN('vehicle',
                                     api_config.vehicle_net,
                                     api_config.vehicle_tfmodel,
                                     classes.VOC_CLASSES)
 
-elif api_config.sign_framework == "CAFFE":
+elif api_config.vehicle_framework == "CAFFE":
     vehicle_detector = FasterRCNN(api_config.vehicle_prototxt,
                                   api_config.vehicle_caffemodel,
                                   classes.VOC_CLASSES,
@@ -39,7 +45,6 @@ elif api_config.sign_framework == "CAFFE":
                                api_config.cpu_mode)
 else:
     raise ValueError("Only TF and CAFFE implementations supported")
-
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
@@ -73,6 +78,7 @@ def detect_signs():
         print ('Processing took {:.3f}s'.format(toc-tic))
         return redirect(url_for('detection_api.uploaded_file',
                                 filename=filename))
+    return 0
 
 
 # Route that will process the detect vehicle request
@@ -96,6 +102,52 @@ def detect_vehicles():
         print ('Processing took {:.3f}s'.format(toc-tic))
         return redirect(url_for('detection_api.uploaded_file',
                                 filename=filename))
+    return 0
+
+# Route that will process the depth map request
+@detection_api.route('/fcrn/depth', methods=['POST'])
+def FCRNdepth_map():
+    # Get the name of the uploaded file
+    file = request.files['file']
+    # CONF_THRESHOLD = float(request.form['conf_threshold'])
+    # Check if the file is one of the allowed types/extensions
+    if file and allowed_file(file.filename):
+        tic = time.clock()
+        # Make the filename safe, remove unsupported chars
+        filename = secure_filename(file.filename)
+        path = os.path.join(api_config.upload_folder, filename)
+        # Move the file form the temporal folder to the upload folder we setup
+        file.save(path)
+        FCRNDepth_estimator.detect(path)
+        # Redirect the user to the resulting video route, which
+        # will basicaly show on the browser the processed video
+        toc = time.clock()
+        print ('Processing took {:.3f}s'.format(toc - tic))
+        return redirect(url_for('detection_api.uploaded_file',
+                                    filename=filename))
+
+# Route that will process monodepth map request
+@detection_api.route('/monocular/depth', methods=['POST'])
+def monoculardepth_map():
+    # Get the name of the uploaded file
+    file = request.files['file']
+    # CONF_THRESHOLD = float(request.form['conf_threshold'])
+    # Check if the file is one of the allowed types/extensions
+    if file and allowed_file(file.filename):
+        tic = time.clock()
+        # Make the filename safe, remove unsupported chars
+        filename = secure_filename(file.filename)
+        path = os.path.join(api_config.upload_folder, filename)
+        # Move the file form the temporal folder to the upload folder we setup
+        file.save(path)
+        monoculardepth_estimator.detect(path)
+        # Redirect the user to the resulting video route, which
+        # will basicaly show on the browser the processed video
+        toc = time.clock()
+        print ('Processing took {:.3f}s'.format(toc - tic))
+        return redirect(url_for('detection_api.uploaded_file',
+                                filename=filename))
+
 
 
 # This route is expecting a parameter containing the name
