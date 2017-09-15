@@ -87,7 +87,7 @@ Place the download file at: autonomous-driving/api/resources/tffaster-rcnn/weigh
 ````
 
 #### Run the application
+In the application's root directory run:
 ````
-export FLASK_APP=main.py
-flask run
+python main.py
 ````
