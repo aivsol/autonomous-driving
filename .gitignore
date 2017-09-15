@@ -4,6 +4,7 @@
 *.avi
 *.jpg
 *.ppm
+.idea/*
 /api/resources/FCRN_depth/weights/
 /api/resources/monocular_depth/weights/
 /api/uploads/result
