@@ -96,41 +96,41 @@ class MonocularDepth(MLAlgorithm):
 
     def detect(self, path):
         #Using Moviepy script - Start
-        # vid_output = api_config.result_folder + 'out.mp4'
-        # # Location of the input video
-        # clip1 = VideoFileClip(path)
-        # vid_clip = clip1.fl_image(self.process_start)
-        # vid_clip.write_videofile(vid_output, audio=False)
+        vid_output = api_config.result_folder + 'out.mp4'
+        # Location of the input video
+        clip1 = VideoFileClip(path)
+        vid_clip = clip1.fl_image(self.process_start)
+        vid_clip.write_videofile(vid_output, audio=False)
         # Using Moviepy script - End
 
         #ffmpeg based script - Start
-        video_name = os.path.basename(path)
-        frames_folder = video_to_frames(video_name)
-
-        im_names = glob.glob(os.path.join(frames_folder, '*.ppm'))
-        im_names.sort()
-        for img_name in im_names:
-            print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-            print 'Demo {}'.format(img_name)
-            # timer = Timer()
-            # timer.tic()
-            # Output frame path
-            im_name = img_name.split('/')[-1].replace('.ppm', '.jpg')
-            im_path_ = os.path.join(api_config.upload_folder,
-                                    video_name.split(".")[0],
-                                    "annotated-frames", im_name)
-            im = np.array(Image.open(img_name))
-            im = im[:, :, ::-1]
-            disparity = self.process_start(im)
-            fig, ax = plt.subplots(figsize=(18, 18))
-            ax.imshow(im, aspect='equal')
-            plt.imshow(disparity)
-            plt.tight_layout()
-            plt.axis('off')
-            plt.savefig(im_path_, bbox_inches='tight')
-            plt.close()
-            # timer.toc()
-            # print ('Detection took {:.3f}s')
-        frames_to_video(video_name)
+        # video_name = os.path.basename(path)
+        # frames_folder = video_to_frames(video_name)
+        #
+        # im_names = glob.glob(os.path.join(frames_folder, '*.ppm'))
+        # im_names.sort()
+        # for img_name in im_names:
+        #     print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+        #     print 'Demo {}'.format(img_name)
+        #     # timer = Timer()
+        #     # timer.tic()
+        #     # Output frame path
+        #     im_name = img_name.split('/')[-1].replace('.ppm', '.jpg')
+        #     im_path_ = os.path.join(api_config.upload_folder,
+        #                             video_name.split(".")[0],
+        #                             "annotated-frames", im_name)
+        #     im = np.array(Image.open(img_name))
+        #     im = im[:, :, ::-1]
+        #     disparity = self.process_start(im)
+        #     fig, ax = plt.subplots(figsize=(18, 18))
+        #     ax.imshow(im, aspect='equal')
+        #     plt.imshow(disparity)
+        #     plt.tight_layout()
+        #     plt.axis('off')
+        #     plt.savefig(im_path_, bbox_inches='tight')
+        #     plt.close()
+        #     # timer.toc()
+        #     # print ('Detection took {:.3f}s')
+        # frames_to_video(video_name)
         # ffmpeg based script - End
 
