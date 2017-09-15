@@ -1,59 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-          rel="stylesheet">
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h3 class="text-muted">Detect Signs</h3>
-      </div>
-      <hr/>
-      <form action="faster_rcnn/signs" method="post" enctype="multipart/form-data">
-        <input type="file" name="file"><br /><br />
-        <b> Confidence Threshold: </b>
-        <select name="conf_threshold">
-            <option value="0.6">0.6</option>
-            <option value="0.7">0.7</option>
-            <option value="0.8">0.8</option>
-            <option value="0.9">0.9</option>
-        </select>
-        </br>
-        <input type="submit" value="Detect Signs">
-      </form>
-    </div>
-    <div class="container">
-      <div class="header">
-        <h3 class="text-muted">Detect Vehicles</h3>
-      </div>
-      <hr/>
-      <form action="faster_rcnn/vehicles" method="post" enctype="multipart/form-data">
-        <input type="file" name="file"><br /><br />
-        <b> Confidence Threshold: </b>
-        <select name="conf_threshold">
-            <option value="0.6">0.6</option>
-            <option value="0.7">0.7</option>
-            <option value="0.8">0.8</option>
-            <option value="0.9">0.9</option>
-        </select>
-        </br>
-        <input type="submit" value="Detect Vehicles">
-      </form>
-    </div>
-    <div class="container">
-      <div class="header">
-        <h3 class="text-muted">Generate Depth Map</h3>
-      </div>
-      <hr/>
-      <!--<form action="fcrn/depth" method="post" enctype="multipart/form-data">-->
-      <form action="monocular/depth" method="post" enctype="multipart/form-data">
-        <input type="file" name="file"><br /><br />
-        </br>
-        <input type="submit" value="Generate">
-      </form>
-    </div>
 
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prototype Demo | AIVSOL</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.2/css/bulma.min.css">
 
-  </body>
+  <style>
+    @media screen and (max-width: 768px) {
+      .column_border {
+        border: 1px solid #A5A5A5;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+    }
+
+    @media screen and (min-width: 769px) {
+      .field-label {
+        flex-basis: 25%;
+      }
+      .column_border {
+        border: 1px solid #A5A5A5;
+        border-radius: 10px;
+        padding: 30px;
+      }
+    }
+    .coming-soon {
+      color: #A5A5A5;
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-vcentered">
+          <div class="column">
+            <p class="title">
+              Prototype Demo | AIVSOL
+            </p>
+            <p class="subtitle">
+              Automated labelling for traffic signs, road lanes and vehicles detection & depth map estimation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns">
+          <!-- detect signs -->
+          <div class="column column_border is-5">
+            <h3 class="title is-3">Traffic Signs detection</h3>
+
+            <form action="faster_rcnn/signs" method="post" enctype="multipart/form-data">
+
+              <div class="field is-horizontal">
+                <div class="field-label">
+                  <label class="label">File to process</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-narrow">
+                    <div class="control">
+                      <input type="file" name="file">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Confidence Threshold</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-narrow">
+                    <div class="control">
+                      <div class="select is-fullwidth">
+                        <select name="conf_threshold">
+                          <option value="0.6">0.6</option>
+                          <option value="0.7">0.7</option>
+                          <option value="0.8">0.8</option>
+                          <option value="0.9">0.9</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="control">
+                  <input class="button is-info is-medium" type="submit" value="Label Signs">
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- detect vehicles -->
+          <div class="column column_border is-5 is-offset-1">
+            <h3 class="title is-3">Vehicles Detection</h3>
+
+            <form action="faster_rcnn/vehicles" method="post" enctype="multipart/form-data">
+
+              <div class="field is-horizontal">
+                <div class="field-label">
+                  <label class="label">File to process</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-narrow">
+                    <div class="control">
+                      <input type="file" name="file">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Confidence Threshold</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-narrow">
+                    <div class="control">
+                      <div class="select is-fullwidth">
+                        <select name="conf_threshold">
+                          <option value="0.6">0.6</option>
+                          <option value="0.7">0.7</option>
+                          <option value="0.8">0.8</option>
+                          <option value="0.9">0.9</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="control">
+                  <input class="button is-info is-medium" type="submit" value="Label Vehicles">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <br>
+        <div class="columns">
+          <!-- depth map -->
+          <div class="column column_border is-5">
+            <h3 class="title is-3">Distance Estimation (Depth Map)</h3>
+
+            <form action="monocular/depth" method="post" enctype="multipart/form-data">
+
+              <div class="field is-horizontal">
+                <div class="field-label">
+                  <label class="label">File to process</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-narrow">
+                    <div class="control">
+                      <input type="file" name="file">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Environment</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-narrow">
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select name="environment">
+                              <option value="indoor">Indoor</option>
+                              <option value="outdoor">Outdoor</option>
+                            </select>
+                          </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="control">
+                  <input class="button is-info is-medium" type="submit" value="Generate Map">
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- detect lanes -->
+          <div class="column column_border is-5 is-offset-1">
+            <h3 class="title is-3">Road Lane detection</h3>
+            <span class="coming-soon">Coming Soon...</span>
+
+            <!-- TODO: Update form and API call, update fields once it's done in backend -->
+            <!-- <form action="faster_rcnn/vehicles" method="post" enctype="multipart/form-data">
+
+              <div class="field is-horizontal">
+                <div class="field-label">
+                  <label class="label">File to process</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-narrow">
+                    <div class="control">
+                      <input type="file" name="file">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Confidence Threshold</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-narrow">
+                    <div class="control">
+                      <div class="select is-fullwidth">
+                        <select name="conf_threshold">
+                          <option value="0.6">0.6</option>
+                          <option value="0.7">0.7</option>
+                          <option value="0.8">0.8</option>
+                          <option value="0.9">0.9</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="control">
+                  <input class="button is-info is-medium" type="submit" value="Detect Lanes">
+                </div>
+              </div>
+            </form> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <p>
+          Prototype Demo<br>
+          <i class="fa fa-copyright"></i> 2017 - Aivsol. All Rights Reserved
+        </p>
+      </div>
+    </div>
+  </footer>
+</body>
 </html>
