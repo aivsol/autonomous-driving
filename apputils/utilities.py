@@ -95,7 +95,7 @@ def xml_write(videoname, im_name, annotation):
     xmlstr = minidom.parseString(
                 ET.tostring(annotation)).toprettyxml(indent="    ")
     annotation_xml_folder = os.path.join(dir_path, 'annotations')
-    xml_file_name = im_name.replace("jpg", "xml")
+    xml_file_name = im_name.replace("png", "xml")
     xml_file_path = os.path.join(annotation_xml_folder,
                                  xml_file_name)
     print 'Writing: ', xml_file_path
