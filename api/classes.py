@@ -2,7 +2,7 @@ VOC_CLASSES = ('__background__',
                'aeroplane', 'bicycle', 'bird', 'boat',
                'bottle', 'bus', 'car', 'cat', 'chair',
                'cow', 'diningtable', 'dog', 'horse',
-               'motorbike', 'person', 'pottedplant',
+               'motorbike', 'pedestrian', 'pottedplant',
                'sheep', 'sofa', 'train', 'tvmonitor')
 
 SIGNS_CLASSES = ('__background__',
@@ -21,4 +21,4 @@ SIGNS_CLASSES = ('__background__',
                  'restrict-ends-overtaking', 'restrict-ends-overtaking-truck')
 
 IGNORE = ('bottle', 'cat', 'chair', 'cow', 'diningtable', 'dog', 'horse',
-          'person', 'pottedplant', 'sheep', 'sofa', 'tvmonitor')
+          'pottedplant', 'sheep', 'sofa', 'tvmonitor')

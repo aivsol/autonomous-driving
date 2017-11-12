@@ -84,24 +84,26 @@ def detect_signs():
 # Route that will process the detect vehicle request
 @detection_api.route('/faster_rcnn/vehicles', methods=['POST'])
 def detect_vehicles():
-    # Get the name of the uploaded file
-    file = request.files['file']
+    # # Get the name of the uploaded file
+    # file = request.files['file']
+    # CONF_THRESHOLD = float(request.form['conf_threshold'])
+    # # Check if the file is one of the allowed types/extensions
+    # if file and allowed_file(file.filename):
+    #     tic = time.clock()
+    #     # Make the filename safe, remove unsupported chars
+    #     filename = secure_filename(file.filename)
+    #     path = os.path.join(api_config.upload_folder, filename)
+    #     # Move the file form the temporal folder to the upload folder we setup
+    #     file.save(path)
+    #     vehicle_detector.detect(path, CONF_THRESHOLD)
+    #     # Redirect the user to the resulting video route, which
+    #     # will basicaly show on the browser the processed video
+    #     toc = time.clock()
+    #     print ('Processing took {:.3f}s'.format(toc-tic))
+    #     return redirect(url_for('detection_api.uploaded_file',
+    #                             filename=filename))
     CONF_THRESHOLD = float(request.form['conf_threshold'])
-    # Check if the file is one of the allowed types/extensions
-    if file and allowed_file(file.filename):
-        tic = time.clock()
-        # Make the filename safe, remove unsupported chars
-        filename = secure_filename(file.filename)
-        path = os.path.join(api_config.upload_folder, filename)
-        # Move the file form the temporal folder to the upload folder we setup
-        file.save(path)
-        vehicle_detector.detect(path, CONF_THRESHOLD)
-        # Redirect the user to the resulting video route, which
-        # will basicaly show on the browser the processed video
-        toc = time.clock()
-        print ('Processing took {:.3f}s'.format(toc-tic))
-        return redirect(url_for('detection_api.uploaded_file',
-                                filename=filename))
+    vehicle_detector.detect(os.path.join(api_config.upload_folder, 'samples', 'frames'), CONF_THRESHOLD)
     return 0
 
 # Route that will process the depth map request

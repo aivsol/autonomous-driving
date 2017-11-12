@@ -41,18 +41,20 @@ class TFFasterRCNN(MLAlgorithm):
         print 'Loaded network {:s}'.format(demo_model)
 
     def detect(self, path, conf_thresh=0.8):
-
-        video_name = os.path.basename(path)
-        frames_folder = video_to_frames(video_name)
-
-        im_names = glob.glob(os.path.join(frames_folder, '*.jpg'))
+        #
+        # video_name = os.path.basename(path)
+        # frames_folder = video_to_frames(video_name)
+        #
+        # im_names = glob.glob(os.path.join(frames_folder, '*.jpg'))
+        im_names = glob.glob(os.path.join(path, '*.png'))
         im_names.sort()
         for im_name in im_names:
             print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
             print 'Demo TF {}'.format(im_name)
-            self. process_frame(video_name, im_name, self.classes, conf_thresh)
+            #self.process_frame(video_name, im_name, self.classes, conf_thresh)
+            self.process_frame('samples.mp4', im_name, self.classes, conf_thresh)
 
-        frames_to_video(video_name)
+        #frames_to_video(video_name)
 
     def draw(self, im_file, class_name, dets, ax, thresh=0.5):
 
