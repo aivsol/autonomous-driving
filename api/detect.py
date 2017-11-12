@@ -2,7 +2,7 @@
 import _init
 import os
 from flask import render_template, request, redirect, \
-                    url_for, send_from_directory, Blueprint
+                    url_for, send_from_directory, Blueprint, jsonify
 from werkzeug import secure_filename
 import time
 import classes
@@ -104,7 +104,7 @@ def detect_vehicles():
     #                             filename=filename))
     CONF_THRESHOLD = float(request.form['conf_threshold'])
     vehicle_detector.detect(os.path.join(api_config.upload_folder, 'samples', 'frames'), CONF_THRESHOLD)
-    return 0
+    return jsonify(message='Detections done!')
 
 # Route that will process the depth map request
 @detection_api.route('/fcrn/depth', methods=['POST'])
